@@ -167,6 +167,8 @@ static zend_function_entry redis_functions[] = {
      PHP_ME(Redis, hIncrBy, NULL, ZEND_ACC_PUBLIC)
      PHP_ME(Redis, hMset, NULL, ZEND_ACC_PUBLIC)
      PHP_ME(Redis, hMget, NULL, ZEND_ACC_PUBLIC)
+     /* Debug Object */
+     PHP_ME(Redis, debugObject, NULL, ZEND_ACC_PUBLIC)
 
      PHP_ME(Redis, multi, NULL, ZEND_ACC_PUBLIC)
      PHP_ME(Redis, discard, NULL, ZEND_ACC_PUBLIC)
