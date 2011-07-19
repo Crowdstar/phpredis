@@ -152,6 +152,8 @@ PHP_METHOD(Redis, unsubscribe);
 
 PHP_METHOD(Redis, getOption);
 PHP_METHOD(Redis, setOption);
+/** Debug Object call **/
+PHP_METHOD(Redis, debugObject);
 
 #ifdef PHP_WIN32
 #define PHP_REDIS_API __declspec(dllexport)

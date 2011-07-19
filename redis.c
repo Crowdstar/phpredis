@@ -788,6 +788,38 @@ PHP_METHOD(Redis, get)
 }
 /* }}} */
 
+/* {{{ proto string Redis::debugObject(string key)
+ */
+PHP_METHOD(Redis, debugObject)
+{
+    zval *object;
+    RedisSock *redis_sock;
+    char *key = NULL, *cmd;
+    int key_len, cmd_len;
+if (zend_parse_method_parameters(ZEND_NUM_ARGS() TSRMLS_CC, getThis(), "Os",
+                                     &object, redis_ce,
+                                     &key, &key_len) == FAILURE) {
+        RETURN_FALSE;
+    }
+
+    if (redis_sock_get(object, &redis_sock TSRMLS_CC) < 0) {
+        php_error_docref(NULL TSRMLS_CC, E_NOTICE, "FAILED SOCK");
+        RETURN_FALSE;
+    }
+
+        int key_free = redis_key_prefix(redis_sock, &key, &key_len TSRMLS_CC);
+	/** Im sure there is a more elegant way to do this but i just hacked it up **/
+	cmd_len = redis_cmd_format_static(&cmd, "DEBUG", "ss", "OBJECT",6, key, key_len);
+        if(key_free) efree(key);
+
+        REDIS_PROCESS_REQUEST(redis_sock, cmd, cmd_len);
+    IF_ATOMIC() {
+          redis_string_response(INTERNAL_FUNCTION_PARAM_PASSTHRU, redis_sock, NULL, NULL);
+    }
+    REDIS_PROCESS_RESPONSE(redis_string_response);
+
+}
+/* }}} */
 
 /* {{{ proto string Redis::ping()
  */
